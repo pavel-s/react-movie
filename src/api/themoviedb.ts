@@ -9,6 +9,7 @@ class API {
   private initializing = true;
   private config: ApiConfig = null;
   private async getApiConfig() {
+    this.initializing = true;
     try {
       const result = await instance.get<any, AxiosResponse<ApiConfig>>(
         `https://api.themoviedb.org/3/configuration?api_key=${API_KEY}`
@@ -42,10 +43,10 @@ class API {
   constructor() {
     this.getApiConfig();
   }
-  async getMovie(id: string) {
+  async getMovie(id: string = '550') {
     try {
       const result = await instance.get<any, AxiosResponse<Movie>>(
-        `https://api.themoviedb.org/3/movie/550?api_key=${API_KEY}`
+        `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}`
       );
       const posterUrl = await this.makePosterUrl(result.data.poster_path);
 
