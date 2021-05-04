@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { Movie } from '../types';
+require('dotenv').config();
 const API_KEY = process.env.REACT_APP_TMDB_KEY;
 
 const instance = axios.create();
