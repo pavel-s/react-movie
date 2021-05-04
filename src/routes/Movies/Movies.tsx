@@ -1,8 +1,9 @@
 import { Grid, makeStyles } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
-import { themoviedbAPI } from '../../api/themoviedb';
+import React, { useEffect } from 'react';
 import MovieCard from '../../components/MovieCard/MovieCard';
-import { Movie } from '../../types';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { getTrending } from '../../redux/moviesReducer';
+import { moviesTrending } from '../../redux/selectors';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -12,18 +13,13 @@ const useStyles = makeStyles((theme) => ({
 
 const Movies = () => {
   const styles = useStyles();
+  const dispatch = useAppDispatch();
 
-  const [movies, setMovies] = useState<Movie[]>([]);
+  const movies = useAppSelector(moviesTrending);
 
   useEffect(() => {
-    const getList = async () => {
-      const trendingResponse = await themoviedbAPI.getTrending();
-      if (trendingResponse) {
-        setMovies(trendingResponse.results);
-      }
-    };
-    getList();
-  }, []);
+    dispatch(getTrending());
+  }, [dispatch]);
 
   const cards = movies.map((movie) => (
     <Grid item key={String(movie.id)}>

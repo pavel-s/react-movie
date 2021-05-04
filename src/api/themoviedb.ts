@@ -94,7 +94,7 @@ type ApiConfig = {
   change_keys: string[];
 } | null;
 
-type TrendingResponse = {
+export type TrendingResponse = {
   page: number;
   results: Movie[];
   total_pages: number;
