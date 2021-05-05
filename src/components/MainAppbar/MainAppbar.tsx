@@ -1,5 +1,7 @@
 import {
   AppBar,
+  Box,
+  Button,
   fade,
   InputBase,
   makeStyles,
@@ -8,6 +10,7 @@ import {
 import SearchIcon from '@material-ui/icons/Search';
 import { ChangeEvent } from 'react';
 import { debounce } from 'lodash';
+import { Link } from 'react-router-dom';
 
 const debouncedHandler = debounce(
   (val) => {
@@ -58,6 +61,15 @@ const useStyles = makeStyles((theme) => ({
       width: '20ch',
     },
   },
+  toolbarRight: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    '& > *': {
+      marginRight: 20,
+    },
+  },
 }));
 
 const MainAppbar = () => {
@@ -81,6 +93,17 @@ const MainAppbar = () => {
             }}
           />
         </div>
+        <Box className={styles.toolbarRight}>
+          <Button component={Link} to='/'>
+            Movies
+          </Button>
+          <Button component={Link} to='/watchlist'>
+            WatchList
+          </Button>
+          <Button component={Link} to='/watched'>
+            Watched
+          </Button>
+        </Box>
       </Toolbar>
     </AppBar>
   );

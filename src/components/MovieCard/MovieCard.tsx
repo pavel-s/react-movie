@@ -1,14 +1,15 @@
 import {
   Card,
   CardActionArea,
+  CardActions,
   CardContent,
   CardMedia,
   makeStyles,
   Typography,
 } from '@material-ui/core';
 import Color from 'color';
-import React from 'react';
 import { Movie } from '../../types';
+import MovieCardActions from './MovieCardActions';
 
 const useStyles = makeStyles(() => ({
   actionArea: {
@@ -20,16 +21,31 @@ const useStyles = makeStyles(() => ({
     maxWidth: 256,
   },
   card: ({ color }: { color: string }) => ({
+    position: 'relative',
     minWidth: 256,
+    maxWidth: 256,
     borderRadius: 16,
     boxShadow: 'none',
+    transition: '0.2s',
     '&:hover': {
+      transform: 'scale(1.03)',
       boxShadow: `0 6px 12px 0 ${Color(color)
         .rotate(-12)
         .darken(0.2)
         .fade(0.5)}`,
     },
   }),
+  actions: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    // zIndex: 999,
+    // height: 50,
+    width: 256,
+    '&:hover': {
+      backgroundColor: 'rgb(1,1,1, 0.3)',
+    },
+  },
   content: ({ color }: { color: string }) => {
     return {
       backgroundColor: color,
@@ -68,28 +84,45 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: 1,
   }),
 }));
 
-const MovieCard = ({ movie }: { movie: Movie }) => {
+const MovieCard = ({
+  movie,
+  inWatchList,
+  watched,
+}: {
+  movie: Movie;
+  inWatchList?: boolean;
+  watched?: boolean;
+}) => {
   const styles = useStyles({ color: '#203f52' });
   return (
-    <CardActionArea className={styles.actionArea}>
-      <Card className={styles.card}>
+    <Card className={styles.card}>
+      <CardActionArea className={styles.actionArea}>
         <CardMedia image={movie.poster_path} className={styles.media} />
-        <CardContent className={styles.content}>
-          <Typography variant='h2' className={styles.title}>
-            {movie.title}
-          </Typography>
-          <Typography variant='subtitle1' className={styles.subtitle}>
-            {movie.release_date}
-          </Typography>
-        </CardContent>
-        <div className={styles.rating}>
-          <span>{movie.vote_average}</span>
-        </div>
-      </Card>
-    </CardActionArea>
+      </CardActionArea>
+
+      <CardContent className={styles.content}>
+        <Typography variant='h2' className={styles.title}>
+          {movie.title}
+        </Typography>
+        <Typography variant='subtitle1' className={styles.subtitle}>
+          {movie.release_date}
+        </Typography>
+      </CardContent>
+      <div className={styles.rating}>
+        <span>{movie.vote_average}</span>
+      </div>
+      <CardActions className={styles.actions}>
+        <MovieCardActions
+          id={movie.id}
+          inWatchList={inWatchList}
+          watched={watched}
+        />
+      </CardActions>
+    </Card>
   );
 };
 

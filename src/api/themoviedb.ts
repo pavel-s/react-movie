@@ -43,7 +43,7 @@ class API {
   constructor() {
     this.getApiConfig();
   }
-  async getMovie(id: string = '550') {
+  async getMovie(id: number = 550) {
     try {
       const result = await instance.get<any, AxiosResponse<Movie>>(
         `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}`

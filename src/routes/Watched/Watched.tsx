@@ -3,8 +3,8 @@ import { useEffect } from 'react';
 import MainAppbar from '../../components/MainAppbar/MainAppbar';
 import MoviesGrid from '../../components/MoviesGrid/MoviesGrid';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { getTrending } from '../../redux/moviesReducer';
-import { moviesTrending } from '../../redux/selectors';
+import { watchedMovies } from '../../redux/selectors';
+import { getWatchedList } from '../../redux/watchedReducer';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -18,22 +18,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Movies = () => {
+const Watched = () => {
   const styles = useStyles();
   const dispatch = useAppDispatch();
 
-  const movies = useAppSelector(moviesTrending);
+  const movies = useAppSelector(watchedMovies);
 
   useEffect(() => {
-    dispatch(getTrending());
+    dispatch(getWatchedList());
   }, [dispatch]);
 
   return (
     <Box className={styles.container}>
       <MainAppbar />
-      <MoviesGrid movies={movies} type='movies' />
+      <MoviesGrid movies={movies} type='watched' />
     </Box>
   );
 };
 
-export default Movies;
+export default Watched;
