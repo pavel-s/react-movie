@@ -1,13 +1,17 @@
-import { Grid, makeStyles } from '@material-ui/core';
-import React, { useEffect } from 'react';
+import { Box, Grid, makeStyles } from '@material-ui/core';
+import { useEffect } from 'react';
+import MainAppbar from '../../components/MainAppbar/MainAppbar';
 import MovieCard from '../../components/MovieCard/MovieCard';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { getTrending } from '../../redux/moviesReducer';
 import { moviesTrending } from '../../redux/selectors';
 
 const useStyles = makeStyles((theme) => ({
-  container: {
+  container: { backgroundColor: theme.palette.background.default },
+  grid: {
     padding: theme.spacing(1),
+    marginTop: theme.appBar.height,
+    width: '100%',
   },
 }));
 
@@ -28,9 +32,12 @@ const Movies = () => {
   ));
 
   return (
-    <Grid container spacing={2} className={styles.container}>
-      {cards}
-    </Grid>
+    <Box className={styles.container}>
+      <MainAppbar />
+      <Grid container spacing={2} className={styles.grid}>
+        {cards}
+      </Grid>
+    </Box>
   );
 };
 
