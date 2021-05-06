@@ -3,6 +3,8 @@ import { Movie } from '../types';
 require('dotenv').config();
 const API_KEY = process.env.REACT_APP_TMDB_KEY;
 
+const POSTER_IMAGE_SIZE = 'w500';
+
 const instance = axios.create();
 
 class API {
@@ -31,13 +33,37 @@ class API {
     if (this.config) {
       return (
         this.config.images.base_url +
-        (this.config.images.poster_sizes.includes('w500')
-          ? 'w500'
+        (this.config.images.poster_sizes.includes(POSTER_IMAGE_SIZE)
+          ? POSTER_IMAGE_SIZE
           : this.config.images.poster_sizes[0]) +
         poster
       );
     } else {
       return '';
+    }
+  }
+  /**
+   * @param url - specific api request url
+   */
+  private async getMoviesList(url: string) {
+    try {
+      const result = await instance.get<any, AxiosResponse<MoviesListResponse>>(
+        url
+      );
+
+      const resultsPopulated = await Promise.all(
+        result.data.results.map(async (movie) => {
+          if (!movie.poster_path) {
+            return movie;
+          }
+          const posterUrl = await this.makePosterUrl(movie.poster_path, true);
+          return { ...movie, poster_path: posterUrl };
+        })
+      );
+
+      return { ...result.data, results: resultsPopulated };
+    } catch (error) {
+      console.log(error);
     }
   }
   constructor() {
@@ -58,24 +84,21 @@ class API {
       console.log(error);
     }
   }
+  // search for movies
+  async searchMovies(query: string, page: number = 1) {
+    const result = await this.getMoviesList(
+      `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=en-US&query=${encodeURIComponent(
+        query
+      )}&page=${page}&include_adult=false`
+    );
+    return result;
+  }
   // get trending item list for last week
   async getTrending(type: 'movie' | 'tv' = 'movie') {
-    try {
-      const result = await instance.get<any, AxiosResponse<TrendingResponse>>(
-        `https://api.themoviedb.org/3/trending/${type}/week?api_key=${API_KEY}`
-      );
-
-      const resultsPopulated = await Promise.all(
-        result.data.results.map(async (movie) => {
-          const posterUrl = await this.makePosterUrl(movie.poster_path, true);
-          return { ...movie, poster_path: posterUrl };
-        })
-      );
-
-      return { ...result.data, results: resultsPopulated };
-    } catch (error) {
-      console.log(error);
-    }
+    const result = await this.getMoviesList(
+      `https://api.themoviedb.org/3/trending/${type}/week?api_key=${API_KEY}`
+    );
+    return result;
   }
 }
 
@@ -94,9 +117,12 @@ type ApiConfig = {
   change_keys: string[];
 } | null;
 
-export type TrendingResponse = {
+type MoviesListResponse = {
   page: number;
   results: Movie[];
   total_pages: number;
   total_results: number;
 };
+
+export type TrendingResponse = MoviesListResponse;
+export type SearchResponse = TrendingResponse;

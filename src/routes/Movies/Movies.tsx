@@ -1,10 +1,9 @@
 import { Box, makeStyles } from '@material-ui/core';
-import { useEffect } from 'react';
 import MainAppbar from '../../components/MainAppbar/MainAppbar';
 import MoviesGrid from '../../components/MoviesGrid/MoviesGrid';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { getTrending } from '../../redux/moviesReducer';
+import { useAppSelector } from '../../redux/hooks';
 import { moviesTrending } from '../../redux/selectors';
+import MoviesSearch from './MoviesSearch';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -20,17 +19,12 @@ const useStyles = makeStyles((theme) => ({
 
 const Movies = () => {
   const styles = useStyles();
-  const dispatch = useAppDispatch();
 
   const movies = useAppSelector(moviesTrending);
 
-  useEffect(() => {
-    dispatch(getTrending());
-  }, [dispatch]);
-
   return (
     <Box className={styles.container}>
-      <MainAppbar />
+      <MainAppbar Left={MoviesSearch} />
       <MoviesGrid movies={movies} type='movies' />
     </Box>
   );

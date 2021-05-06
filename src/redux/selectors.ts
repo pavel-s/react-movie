@@ -2,6 +2,7 @@ import { Movie } from '../types';
 import { RootState } from './store';
 
 export const moviesTrending = (state: RootState) => state.movies.results;
+export const moviesSearchQuery = (state: RootState) => state.movies.query;
 
 export const userWatchList = (state: RootState) => state.user.watchList;
 export const watchListItems = (state: RootState) => {

@@ -39,8 +39,6 @@ const useStyles = makeStyles(() => ({
     position: 'absolute',
     top: 0,
     left: 0,
-    // zIndex: 999,
-    // height: 50,
     width: 256,
     '&:hover': {
       backgroundColor: 'rgb(1,1,1, 0.3)',
@@ -48,7 +46,7 @@ const useStyles = makeStyles(() => ({
   },
   content: ({ color }: { color: string }) => {
     return {
-      backgroundColor: color,
+      // backgroundColor: color,
       padding: '1rem',
       paddingBottom: '1rem !important',
     };
@@ -67,8 +65,9 @@ const useStyles = makeStyles(() => ({
     fontSize: 14,
   },
   media: {
-    height: 300,
+    height: 384,
   },
+  noPoster: { display: 'flex', justifyContent: 'center', alignItems: 'center' },
   rating: ({ color }) => ({
     position: 'absolute',
     width: 30,
@@ -101,7 +100,11 @@ const MovieCard = ({
   return (
     <Card className={styles.card}>
       <CardActionArea className={styles.actionArea}>
-        <CardMedia image={movie.poster_path} className={styles.media} />
+        {movie.poster_path ? (
+          <CardMedia image={movie.poster_path} className={styles.media} />
+        ) : (
+          <div className={styles.media + ' ' + styles.noPoster}>no poster</div>
+        )}
       </CardActionArea>
 
       <CardContent className={styles.content}>
