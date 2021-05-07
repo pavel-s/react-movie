@@ -15,8 +15,8 @@ export type WatchListStateItem = WatchListItem & {
 };
 
 export type WatchListState = {
-  // items: (WatchListItem & { status: RequestStatus; movie?: Movie })[];
-  [key: string]: WatchListStateItem;
+  filterQuery: string;
+  items: { [key: string]: WatchListStateItem };
 };
 
 export type WatchedStateItem = WatchedItem & {
@@ -25,5 +25,6 @@ export type WatchedStateItem = WatchedItem & {
 };
 
 export type WatchedState = {
-  [key: string]: WatchedStateItem;
+  filterQuery: string;
+  items: { [key: string]: WatchedStateItem };
 };

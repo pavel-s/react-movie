@@ -3,22 +3,29 @@ import { themoviedbAPI } from '../api/themoviedb';
 import { WatchedState, WatchedStateItem } from './reduxTypes';
 import { RootState } from './store';
 
-const initialState: WatchedState = {};
+const initialState: WatchedState = { filterQuery: '', items: {} };
 
 const watchedSlice = createSlice({
   initialState,
   name: 'watched',
   reducers: {
     watchedSetItem(state, action: PayloadAction<WatchedStateItem>) {
-      state[action.payload.id] = action.payload;
+      state.items[action.payload.id] = action.payload;
     },
     watchedRemoveItem(state, action: PayloadAction<{ id: number }>) {
-      delete state[action.payload.id];
+      delete state.items[action.payload.id];
+    },
+    watchedSetFilterQuery(state, action: PayloadAction<string>) {
+      state.filterQuery = action.payload;
     },
   },
 });
 
-export const { watchedSetItem, watchedRemoveItem } = watchedSlice.actions;
+export const {
+  watchedSetItem,
+  watchedRemoveItem,
+  watchedSetFilterQuery,
+} = watchedSlice.actions;
 
 export const getWatchedList = createAsyncThunk<
   void,
@@ -33,7 +40,7 @@ export const getWatchedList = createAsyncThunk<
 
   // fetch movies from user watched if they not fetched yet
   userWatched.forEach(async (item) => {
-    const watchListStateItem = watchedState[item.id];
+    const watchListStateItem = watchedState.items[item.id];
 
     if (
       !watchListStateItem ||

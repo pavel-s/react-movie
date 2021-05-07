@@ -17,9 +17,11 @@ const useStyles = makeStyles((theme) => ({
 const MoviesGrid = ({
   movies,
   type,
+  filterMode = false,
 }: {
   movies: Movie[];
   type: 'movies' | 'watchlist' | 'watched';
+  filterMode?: boolean;
 }) => {
   const styles = useStyles();
   const watchList = useAppSelector(userWatchList);
@@ -35,9 +37,11 @@ const MoviesGrid = ({
     </Grid>
   ));
 
+  let message = filterMode ? 'no results' : undefined;
+
   return (
     <Grid container spacing={2} className={styles.grid}>
-      {movies.length < 1 ? <EmptyMovieList /> : cards}
+      {movies.length < 1 ? <EmptyMovieList message={message} /> : cards}
     </Grid>
   );
 };

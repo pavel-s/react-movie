@@ -3,8 +3,9 @@ import { useEffect } from 'react';
 import MainAppbar from '../../components/MainAppbar/MainAppbar';
 import MoviesGrid from '../../components/MoviesGrid/MoviesGrid';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { watchListItems } from '../../redux/selectors';
+import { watchListItems, watchListSearchQuery } from '../../redux/selectors';
 import { getWatchListMovies } from '../../redux/watchListReducer';
+import WatchListSearch from './WatchListSearch';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -24,14 +25,16 @@ const WatchList = () => {
 
   const movies = useAppSelector(watchListItems);
 
+  const filterMode = useAppSelector(watchListSearchQuery).length > 0;
+
   useEffect(() => {
     dispatch(getWatchListMovies());
   }, [dispatch]);
 
   return (
     <Box className={styles.container}>
-      <MainAppbar />
-      <MoviesGrid movies={movies} type='watchlist' />
+      <MainAppbar Left={WatchListSearch} />
+      <MoviesGrid movies={movies} type='watchlist' filterMode={filterMode} />
     </Box>
   );
 };

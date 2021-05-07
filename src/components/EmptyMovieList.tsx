@@ -6,11 +6,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EmptyMovieList = () => {
+const EmptyMovieList = ({ message }: { message?: string }) => {
   const styles = useStyles();
   return (
     <Typography variant='h2' className={styles.message}>
-      This list is empty.
+      {message || 'This list is empty.'}
     </Typography>
   );
 };
