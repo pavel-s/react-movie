@@ -3,12 +3,14 @@ import MovieCard from '../../components/MovieCard/MovieCard';
 import { useAppSelector } from '../../redux/hooks';
 import { userWatchedMovies, userWatchList } from '../../redux/selectors';
 import { Movie } from '../../types';
+import EmptyMovieList from '../EmptyMovieList';
 
 const useStyles = makeStyles((theme) => ({
   grid: {
     padding: theme.spacing(1),
     marginTop: theme.appBar.height,
     width: '100%',
+    justifyContent: 'center',
   },
 }));
 
@@ -35,7 +37,7 @@ const MoviesGrid = ({
 
   return (
     <Grid container spacing={2} className={styles.grid}>
-      {cards}
+      {movies.length < 1 ? <EmptyMovieList /> : cards}
     </Grid>
   );
 };

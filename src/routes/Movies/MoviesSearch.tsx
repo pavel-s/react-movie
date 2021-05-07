@@ -53,13 +53,9 @@ const MoviesSearch = () => {
   const [query, setQuery] = useState(initQuery);
 
   const searchMoviesDebounced = useMemo(() => {
-    return debounce(
-      (query: string) => dispatch(searchMovies({ query })),
-      2000,
-      {
-        leading: true,
-      }
-    );
+    return debounce((query: string) => dispatch(searchMovies({ query })), 500, {
+      leading: true,
+    });
   }, [dispatch]);
 
   useEffect(() => {
