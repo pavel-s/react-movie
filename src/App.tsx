@@ -4,7 +4,7 @@ import Movies from './routes/Movies/Movies';
 import { Provider } from 'react-redux';
 import store, { persistor } from './redux/store';
 import { ThemeProvider } from '@material-ui/styles';
-import { createMuiTheme } from '@material-ui/core';
+import { createMuiTheme, CssBaseline } from '@material-ui/core';
 import './utils/theme';
 import WatchList from './routes/WatchList/WatchList';
 import Watched from './routes/Watched/Watched';
@@ -21,6 +21,7 @@ function App() {
       <PersistGate persistor={persistor}>
         <ThemeProvider theme={theme}>
           <Router>
+            <CssBaseline />
             <Switch>
               <Route exact path='/'>
                 <Movies />

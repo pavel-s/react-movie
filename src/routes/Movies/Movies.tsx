@@ -7,13 +7,7 @@ import MoviesSearch from './MoviesSearch';
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    backgroundColor: theme.palette.background.default,
     minHeight: `calc(100vh - ${theme.appBar.height}px)`,
-  },
-  grid: {
-    padding: theme.spacing(1),
-    marginTop: theme.appBar.height,
-    width: '100%',
   },
 }));
 
