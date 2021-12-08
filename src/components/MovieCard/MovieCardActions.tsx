@@ -10,21 +10,36 @@ import {
   userWatchListAddItem,
   userWatchListRemoveItem,
 } from './../../redux/userReducer';
+import { ComponentPropsWithoutRef, FC } from 'react';
 
-const useStyles = makeStyles((theme) => ({
-  buttons: { color: 'lightgray', '&:hover': { color: 'white' } },
-}));
+const useStyles = makeStyles({
+  button: { color: 'lightgray', '&:hover': { color: 'white' } },
+});
+
+const Action: FC<
+  ComponentPropsWithoutRef<typeof IconButton> & { tooltip: string }
+> = ({ tooltip, children, ...rest }) => {
+  const styles = useStyles();
+  return (
+    <Tooltip title={tooltip}>
+      <IconButton className={styles.button} {...rest}>
+        {children}
+      </IconButton>
+    </Tooltip>
+  );
+};
 
 const MovieCardActions = ({
   id,
   inWatchList,
   watched,
+  flipped,
 }: {
   id: number;
   inWatchList?: boolean;
   watched?: boolean;
+  flipped?: boolean;
 }) => {
-  const styles = useStyles();
   const dispatch = useAppDispatch();
 
   const handleWatchListAdd = () => dispatch(userWatchListAddItem(id));
@@ -33,37 +48,44 @@ const MovieCardActions = ({
   const handleWatchedAdd = () => dispatch(userWatchedAddItem(id));
   const handleWatchedRemove = () => dispatch(userWatchedRemoveItem(id));
 
+  const tabIndex = flipped ? -1 : 0;
+
   return (
     <Box>
       {inWatchList ? (
-        <Tooltip title='remove from watch list'>
-          <IconButton
-            className={styles.buttons}
-            onClick={handleWatchListRemove}
-          >
-            <HighlightOffRoundedIcon />
-          </IconButton>
-        </Tooltip>
+        <Action
+          tooltip='remove from watch list'
+          onClick={handleWatchListRemove}
+          tabIndex={tabIndex}
+        >
+          <HighlightOffRoundedIcon />
+        </Action>
       ) : (
-        <Tooltip title='add to watch list'>
-          <IconButton className={styles.buttons} onClick={handleWatchListAdd}>
-            <AddBoxOutlinedIcon />
-          </IconButton>
-        </Tooltip>
+        <Action
+          tooltip='add to watch list'
+          onClick={handleWatchListAdd}
+          tabIndex={tabIndex}
+        >
+          <AddBoxOutlinedIcon />
+        </Action>
       )}
 
       {watched ? (
-        <Tooltip title='remove from watched'>
-          <IconButton className={styles.buttons} onClick={handleWatchedRemove}>
-            <VisibilityOffOutlinedIcon />
-          </IconButton>
-        </Tooltip>
+        <Action
+          tooltip='remove from watched'
+          onClick={handleWatchedRemove}
+          tabIndex={tabIndex}
+        >
+          <VisibilityOffOutlinedIcon />
+        </Action>
       ) : (
-        <Tooltip title='add to watched'>
-          <IconButton className={styles.buttons} onClick={handleWatchedAdd}>
-            <VisibilityOutlinedIcon />
-          </IconButton>
-        </Tooltip>
+        <Action
+          tooltip='add to watched'
+          onClick={handleWatchedAdd}
+          tabIndex={tabIndex}
+        >
+          <VisibilityOutlinedIcon />
+        </Action>
       )}
     </Box>
   );
