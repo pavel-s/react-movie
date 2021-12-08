@@ -10,7 +10,6 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     marginTop: theme.appBar.height,
     width: '100%',
-    justifyContent: 'center',
   },
 }));
 
