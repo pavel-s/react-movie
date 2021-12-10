@@ -1,8 +1,9 @@
-import { Box, IconButton, makeStyles, Tooltip } from '@material-ui/core';
-import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
-import HighlightOffRoundedIcon from '@material-ui/icons/HighlightOffRounded';
-import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
-import VisibilityOffOutlinedIcon from '@material-ui/icons/VisibilityOffOutlined';
+import { ComponentPropsWithoutRef, FC } from 'react';
+import { CardActions, IconButton, Tooltip, styled } from '@mui/material';
+import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
+import HighlightOffRoundedIcon from '@mui/icons-material/HighlightOffRounded';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import { useAppDispatch } from '../../redux/hooks';
 import {
   userWatchedAddItem,
@@ -10,21 +11,30 @@ import {
   userWatchListAddItem,
   userWatchListRemoveItem,
 } from './../../redux/userReducer';
-import { ComponentPropsWithoutRef, FC } from 'react';
 
-const useStyles = makeStyles({
-  button: { color: 'lightgray', '&:hover': { color: 'white' } },
+const MCardActions = styled(CardActions)({
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  width: 256,
+  '&:hover': {
+    backgroundColor: 'rgb(1,1,1, 0.3)',
+  },
+});
+
+const MActionButton = styled(IconButton)({
+  color: 'lightgray',
+  '&:hover': { color: 'white' },
 });
 
 const Action: FC<
   ComponentPropsWithoutRef<typeof IconButton> & { tooltip: string }
 > = ({ tooltip, children, ...rest }) => {
-  const styles = useStyles();
   return (
     <Tooltip title={tooltip}>
-      <IconButton className={styles.button} {...rest}>
+      <MActionButton size='large' {...rest}>
         {children}
-      </IconButton>
+      </MActionButton>
     </Tooltip>
   );
 };
@@ -51,7 +61,7 @@ const MovieCardActions = ({
   const tabIndex = flipped ? -1 : 0;
 
   return (
-    <Box>
+    <MCardActions>
       {inWatchList ? (
         <Action
           tooltip='remove from watch list'
@@ -87,7 +97,7 @@ const MovieCardActions = ({
           <VisibilityOutlinedIcon />
         </Action>
       )}
-    </Box>
+    </MCardActions>
   );
 };
 

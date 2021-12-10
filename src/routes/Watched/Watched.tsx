@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import AppContainer from '../../components/AppContainer/AppContainer';
 import MainAppbar from '../../components/MainAppbar/MainAppbar';
 import MoviesGrid from '../../components/MoviesGrid/MoviesGrid';
+import RouteContainer from '../../components/RouteContainer';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { watchedMovies, watchedSearchQuery } from '../../redux/selectors';
 import { getWatchedList } from '../../redux/watchedReducer';
@@ -18,10 +18,10 @@ const Watched = () => {
   }, [dispatch]);
 
   return (
-    <AppContainer>
+    <RouteContainer>
       <MainAppbar Left={WatchedSearch} />
       <MoviesGrid movies={movies} type='watched' filterMode={filterMode} />
-    </AppContainer>
+    </RouteContainer>
   );
 };
 

@@ -1,20 +1,16 @@
+import React, { FC, useState } from 'react';
 import {
   Box,
-  Card,
-  CardActionArea,
-  CardActions,
   CardContent,
   CardHeader,
-  CardMedia,
+  Fade,
   IconButton,
   Typography,
-} from '@material-ui/core';
-import { useState } from 'react';
+} from '@mui/material';
 import { Movie } from '../../types';
 import MovieCardActions from './MovieCardActions';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import clsx from 'clsx';
-import { useStyles } from './styles';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { MCard, MCardActionArea, MCardMedia, Rating } from './styles';
 
 const getRatingColor = (rating: number) => {
   if (rating < 5) return 'red';
@@ -22,80 +18,72 @@ const getRatingColor = (rating: number) => {
   return 'green';
 };
 
-const MovieCard = ({
-  movie,
-  inWatchList,
-  watched,
-}: {
-  movie: Movie;
-  inWatchList?: boolean;
-  watched?: boolean;
-}) => {
-  const styles = useStyles({ color: getRatingColor(movie.vote_average) });
-
+const MovieCard: FC<
+  React.ComponentPropsWithRef<typeof Box> & {
+    movie: Movie;
+    inWatchList?: boolean;
+    watched?: boolean;
+  }
+> = ({ movie, inWatchList, watched, ...rest }) => {
   const [cardFlipped, setCardFlipped] = useState(false);
 
+  const ratingBgColor = getRatingColor(movie.vote_average);
+  const ratingColor = ratingBgColor === 'yellow' ? '#000' : '#fff';
+
   return (
-    <Box className={styles.wrapper}>
-      <Card
-        className={clsx(
-          styles.card,
-          styles.cardBack,
-          !cardFlipped && styles.flip
-        )}
-      >
-        <CardHeader
-          title={movie.title}
-          action={
-            <IconButton
-              onClick={() => setCardFlipped((prev) => !prev)}
-              tabIndex={cardFlipped ? 0 : -1}
-              aria-label='flip card'
-            >
-              <ArrowBackIcon />
-            </IconButton>
-          }
-        />
-        <CardContent>
-          <Typography variant='body2'>{movie.overview}</Typography>
-        </CardContent>
-      </Card>
-      <Card className={clsx(styles.card, cardFlipped && styles.flip)}>
-        <CardActionArea
-          className={styles.actionArea}
-          onClick={() => setCardFlipped((prev) => !prev)}
-          tabIndex={cardFlipped ? -1 : 0}
-          aria-label='flip card'
-        >
-          {movie.poster_path ? (
-            <CardMedia image={movie.poster_path} className={styles.media} />
-          ) : (
-            <div className={styles.media + ' ' + styles.noPoster}>
-              no poster
-            </div>
-          )}
-        </CardActionArea>
-        <CardContent className={styles.content}>
-          <Typography variant='h2' className={styles.title}>
-            {movie.title}
-          </Typography>
-          <Typography variant='subtitle1' className={styles.subtitle}>
-            {movie.release_date}
-          </Typography>
-        </CardContent>
-        <div className={styles.rating}>
-          <span>{movie.vote_average}</span>
-        </div>
-        <CardActions className={styles.actions}>
+    <Fade in>
+      <Box position='relative' {...rest}>
+        <MCard isBack={true} flip={cardFlipped}>
+          <CardHeader
+            title={movie.title}
+            action={
+              <IconButton
+                onClick={() => setCardFlipped((prev) => !prev)}
+                tabIndex={cardFlipped ? 0 : -1}
+                aria-label='flip card'
+                size='large'
+              >
+                <ArrowBackIcon />
+              </IconButton>
+            }
+          />
+          <CardContent>
+            <Typography variant='body2'>{movie.overview}</Typography>
+          </CardContent>
+        </MCard>
+
+        <MCard flip={cardFlipped}>
+          <MCardActionArea
+            onClick={() => setCardFlipped((prev) => !prev)}
+            tabIndex={cardFlipped ? -1 : 0}
+            aria-label='flip card'
+          >
+            {movie.poster_path ? (
+              <MCardMedia image={movie.poster_path} />
+            ) : (
+              <MCardMedia>no poster</MCardMedia>
+            )}
+          </MCardActionArea>
+          <CardContent>
+            <Typography variant='h3' fontSize={28} mb={1}>
+              {movie.title}
+            </Typography>
+            <Typography variant='body1' color='info.dark' fontSize={14}>
+              {movie.release_date}
+            </Typography>
+          </CardContent>
+          <Rating bgcolor={ratingBgColor} color={ratingColor}>
+            {movie.vote_average}
+          </Rating>
           <MovieCardActions
             id={movie.id}
             inWatchList={inWatchList}
             watched={watched}
             flipped={cardFlipped}
           />
-        </CardActions>
-      </Card>
-    </Box>
+        </MCard>
+      </Box>
+    </Fade>
   );
 };
 

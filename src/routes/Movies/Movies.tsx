@@ -1,4 +1,4 @@
-import AppContainer from '../../components/AppContainer/AppContainer';
+import RouteContainer from '../../components/RouteContainer';
 import MainAppbar from '../../components/MainAppbar/MainAppbar';
 import MoviesGrid from '../../components/MoviesGrid/MoviesGrid';
 import { useAppSelector } from '../../redux/hooks';
@@ -9,10 +9,10 @@ const Movies = () => {
   const movies = useAppSelector(moviesTrending);
 
   return (
-    <AppContainer>
+    <RouteContainer>
       <MainAppbar Left={MoviesSearch} />
       <MoviesGrid movies={movies} type='movies' />
-    </AppContainer>
+    </RouteContainer>
   );
 };
 
