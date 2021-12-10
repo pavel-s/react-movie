@@ -1,8 +1,9 @@
-import { Box, IconButton, makeStyles, Tooltip } from '@material-ui/core';
-import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
-import HighlightOffRoundedIcon from '@material-ui/icons/HighlightOffRounded';
-import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
-import VisibilityOffOutlinedIcon from '@material-ui/icons/VisibilityOffOutlined';
+import { ComponentPropsWithoutRef, FC } from 'react';
+import { CardActions, IconButton, Tooltip, styled } from '@mui/material';
+import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
+import HighlightOffRoundedIcon from '@mui/icons-material/HighlightOffRounded';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import { useAppDispatch } from '../../redux/hooks';
 import {
   userWatchedAddItem,
@@ -11,20 +12,44 @@ import {
   userWatchListRemoveItem,
 } from './../../redux/userReducer';
 
-const useStyles = makeStyles((theme) => ({
-  buttons: { color: 'lightgray', '&:hover': { color: 'white' } },
-}));
+const MCardActions = styled(CardActions)({
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  width: 256,
+  '&:hover': {
+    backgroundColor: 'rgb(1,1,1, 0.3)',
+  },
+});
+
+const MActionButton = styled(IconButton)({
+  color: 'lightgray',
+  '&:hover': { color: 'white' },
+});
+
+const Action: FC<
+  ComponentPropsWithoutRef<typeof IconButton> & { tooltip: string }
+> = ({ tooltip, children, ...rest }) => {
+  return (
+    <Tooltip title={tooltip}>
+      <MActionButton size='large' {...rest}>
+        {children}
+      </MActionButton>
+    </Tooltip>
+  );
+};
 
 const MovieCardActions = ({
   id,
   inWatchList,
   watched,
+  flipped,
 }: {
   id: number;
   inWatchList?: boolean;
   watched?: boolean;
+  flipped?: boolean;
 }) => {
-  const styles = useStyles();
   const dispatch = useAppDispatch();
 
   const handleWatchListAdd = () => dispatch(userWatchListAddItem(id));
@@ -33,39 +58,46 @@ const MovieCardActions = ({
   const handleWatchedAdd = () => dispatch(userWatchedAddItem(id));
   const handleWatchedRemove = () => dispatch(userWatchedRemoveItem(id));
 
+  const tabIndex = flipped ? -1 : 0;
+
   return (
-    <Box>
+    <MCardActions>
       {inWatchList ? (
-        <Tooltip title='remove from watch list'>
-          <IconButton
-            className={styles.buttons}
-            onClick={handleWatchListRemove}
-          >
-            <HighlightOffRoundedIcon />
-          </IconButton>
-        </Tooltip>
+        <Action
+          tooltip='remove from watch list'
+          onClick={handleWatchListRemove}
+          tabIndex={tabIndex}
+        >
+          <HighlightOffRoundedIcon />
+        </Action>
       ) : (
-        <Tooltip title='add to watch list'>
-          <IconButton className={styles.buttons} onClick={handleWatchListAdd}>
-            <AddBoxOutlinedIcon />
-          </IconButton>
-        </Tooltip>
+        <Action
+          tooltip='add to watch list'
+          onClick={handleWatchListAdd}
+          tabIndex={tabIndex}
+        >
+          <AddBoxOutlinedIcon />
+        </Action>
       )}
 
       {watched ? (
-        <Tooltip title='remove from watched'>
-          <IconButton className={styles.buttons} onClick={handleWatchedRemove}>
-            <VisibilityOffOutlinedIcon />
-          </IconButton>
-        </Tooltip>
+        <Action
+          tooltip='remove from watched'
+          onClick={handleWatchedRemove}
+          tabIndex={tabIndex}
+        >
+          <VisibilityOffOutlinedIcon />
+        </Action>
       ) : (
-        <Tooltip title='add to watched'>
-          <IconButton className={styles.buttons} onClick={handleWatchedAdd}>
-            <VisibilityOutlinedIcon />
-          </IconButton>
-        </Tooltip>
+        <Action
+          tooltip='add to watched'
+          onClick={handleWatchedAdd}
+          tabIndex={tabIndex}
+        >
+          <VisibilityOutlinedIcon />
+        </Action>
       )}
-    </Box>
+    </MCardActions>
   );
 };
 

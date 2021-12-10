@@ -1,15 +1,9 @@
-import { makeStyles, Typography } from '@material-ui/core';
-
-const useStyles = makeStyles((theme) => ({
-  message: {
-    color: theme.palette.text.primary,
-  },
-}));
+import { Typography, useTheme } from '@mui/material';
 
 const EmptyMovieList = ({ message }: { message?: string }) => {
-  const styles = useStyles();
+  const color = useTheme().palette.text.primary;
   return (
-    <Typography variant='h2' className={styles.message}>
+    <Typography variant='h2' color={color}>
       {message || 'This list is empty.'}
     </Typography>
   );

@@ -10,9 +10,10 @@ const WatchedSearch = () => {
     (query: string) => dispatch(watchedSetFilterQuery(query)),
     [dispatch]
   );
-  const handleEmpty = useCallback(() => dispatch(watchedSetFilterQuery('')), [
-    dispatch,
-  ]);
+  const handleEmpty = useCallback(
+    () => dispatch(watchedSetFilterQuery('')),
+    [dispatch]
+  );
 
   return (
     <SearchInput
